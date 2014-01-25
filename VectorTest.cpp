@@ -23,6 +23,14 @@ TEST_CASE("Constructor-V2","[Vector]") {
 	Vector2i e(ar);
 	REQUIRE( e.x == 4 );
 	REQUIRE( e.y == 5 );
+
+	REQUIRE( e[0] == 4 );
+	REQUIRE( e[1] == 5 );
+
+	int* v = e();
+	REQUIRE( *v == 4 );
+	++v;
+	REQUIRE( *v == 5 );
 }
 
 

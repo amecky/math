@@ -153,6 +153,9 @@ Vector<Size,T> operator / (const Vector<Size,T>& u,const T& v) {
 	return ret /= v;
 }
 
+// -------------------------------------------------------
+// Dot
+// -------------------------------------------------------
 template<int Size,class T>
 T dot(const Vector<Size,T>& v,const Vector<Size,T>& u) {
 	T t(0);
@@ -162,6 +165,9 @@ T dot(const Vector<Size,T>& v,const Vector<Size,T>& u) {
 	return t;
 }
 
+// -------------------------------------------------------
+// Length
+// -------------------------------------------------------
 template<int Size,class T>
 T length(const Vector<Size,T>& v) {
 	T t = dot(v,v);	
@@ -169,23 +175,35 @@ T length(const Vector<Size,T>& v) {
 	return static_cast<T>(tmp);
 }
 
+// -------------------------------------------------------
+// sqr_length
+// -------------------------------------------------------
 template<int Size,class T>
 T sqr_length(const Vector<Size,T>& v) {
 	return dot(v,v);	
 }
 
+// -------------------------------------------------------
+// Normalize
+// -------------------------------------------------------
 template<int Size,class T>
 Vector<Size,T> normalize(const Vector<Size,T>& u) {
 	T len = length(u);
 	return u / len;	
 }
 
+// -------------------------------------------------------
+// Distance
+// -------------------------------------------------------
 template<int Size,class T>
 T distance(const Vector<Size,T>& u,const Vector<Size,T>& v) {
 	Vector<Size,T> sub = u - v;
 	return length(sub);
 }
 
+// -------------------------------------------------------
+// Cross
+// -------------------------------------------------------
 template<class T>
 Vector<3,T> cross(const Vector<3,T>& v1,const Vector<3,T>& v2) {
 	T x = v1.y * v2.z - v1.z * v2.y;
@@ -194,6 +212,21 @@ Vector<3,T> cross(const Vector<3,T>& v1,const Vector<3,T>& v2) {
 	return Vector<3,T>(x,y,z);
 }
 
+template<int Size,class T>
+struct Point {
+
+	T data[Size];
+};
+
+template <class T> 
+struct Point<2,T> : public Vector<2,T> { 
+	
+};
+
 typedef Vector<2,int> Vector2i;
 typedef Vector<2,float> Vector2f;
 typedef Vector<3,float> Vector3f;
+typedef Point<2,int> Point2i;
+typedef Point<2,int> Point2f;
+typedef Point<3,int> Point3i;
+typedef Point<3,float> Pointfi;

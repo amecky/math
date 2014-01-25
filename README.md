@@ -1,6 +1,3 @@
-math
-====
-
 # Math
 
 This is a C++ template based math library include Vector and Matrix classes.
@@ -25,6 +22,6 @@ Just include "Vector.h" in your code and you are ready to go.
 |Vector3f |   3  | float |
 
 In case you need something else you can of course define your own like
-<code>
+<pre>
 typedef Vector<4,float> Vector4f
-</code>
+</pre>
