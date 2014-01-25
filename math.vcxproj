@@ -74,7 +74,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="math.cpp" />
+    <ClCompile Include="VectorTest.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="catch.hpp" />
+    <ClInclude Include="Vector.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
