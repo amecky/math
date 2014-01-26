@@ -335,7 +335,7 @@ Vector<Size,float> lerp(const Vector<Size,float>& u,const Vector<Size,float>& v,
 }
 
 template<int Size,class T>
-Vector<Size,T> v_min(const Vector<Size,T>& u,const Vector<Size,T>& v) {
+Vector<Size,T> vec_min(const Vector<Size,T>& u,const Vector<Size,T>& v) {
 	Vector<Size,T> ret;
 	for ( int i = 0; i < Size; ++i ) {
 		if ( u.data[i] <= v.data[i] ) {
@@ -349,7 +349,7 @@ Vector<Size,T> v_min(const Vector<Size,T>& u,const Vector<Size,T>& v) {
 }
 
 template<int Size,class T>
-Vector<Size,T> v_max(const Vector<Size,T>& u,const Vector<Size,T>& v) {
+Vector<Size,T> vec_max(const Vector<Size,T>& u,const Vector<Size,T>& v) {
 	Vector<Size,T> ret;
 	for ( int i = 0; i < Size; ++i ) {
 		if ( u.data[i] >= v.data[i] ) {
@@ -389,4 +389,6 @@ Vector<Size,int> saturate(const Vector<Size,int>& u) {
 
 typedef Vector<2,int> Vector2i;
 typedef Vector<2,float> Vector2f;
+typedef Vector<3,int> Vector3i;
 typedef Vector<3,float> Vector3f;
+typedef Vector<4,float> Vector4f;
