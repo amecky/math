@@ -1,21 +1,30 @@
+//-------------------------------------------------------------------------
+//
+// File:		Vector.h
+// Desc:		A template vector implementation
+// Author:		amecky <amecky@gmail.com>
+// License:     BSD - do whatever you want
+//
+//-------------------------------------------------------------------------
 #pragma once
 #include <cmath>
 
-// -------------------------------------------------------
-// Basic Vector template
-// -------------------------------------------------------
+//! Basic Vector template
+/*! This is the basic template defining only the array of data.
+	The size and the class needs to be defined.
+*/
 template<int Size,class T>
 struct Vector {
 
-	typedef T Type;
+	typedef T Type; //!< The actual type
 
-	T data[Size];
+	T data[Size]; //!< Internal array of values
 
 };
 
-// -------------------------------------------------------
-// Specialized template for size 2
-// -------------------------------------------------------
+//! Specialized template version for size 2
+/*!	
+*/
 template <class T> 
 struct Vector<2,T> { 
 	union { 
@@ -24,24 +33,28 @@ struct Vector<2,T> {
 			T x, y; 
 		};       
 	}; 	
+	//! Default constructor. Setting x and y to 0
 	Vector<2,T>() : x(0) , y(0) {}
+	//! Constructor setting x and y to given value
 	explicit Vector<2,T>(T t) : x(t) , y(t) {}
+	//! Constructor setting x and y to given values
 	Vector<2,T>(T xv,T yv) : x(xv) , y(yv) {}
+	//! Copy constructor.
 	Vector<2,T>(const Vector<2,int>& other) : x(other.x) , y(other.y) {}
+	//! Constructor taking x and y from the given array
 	Vector<2,T>(const T* value) {
 		x = *value;
 		++value;
 		y = *value;
-	}
+	}	
 	const T& operator[] (int idx) const { return data[idx];}
+	//! Conversion operator returning a pointer to internal data
 	T* operator() () {
 		return &data[0];
 	}
 };
 
-// -------------------------------------------------------
-// Specialized template for size 3
-// -------------------------------------------------------
+//! Specialized template for size 3
 template <class T> 
 struct Vector<3,T> { 
 	union { 
@@ -73,6 +86,67 @@ struct Vector<3,T> {
 	
 };
 
+//! Specialized Vector with size 4
+template <class T> struct Vector<4,T> { 
+	union { 
+		T data[4]; 
+		struct { 
+			T x, y, z, w; 
+		}; 
+		struct { 
+			T r, g, b, a; 
+		}; 
+	}; 
+	Vector<4,T>() : x(0) , y(0) , z(0) , w(0) {}
+	explicit Vector<4,T>(T t) : x(t) , y(t) , z(t) , w(t) {}
+	Vector<4,T>(T tx,T ty,T tz,T tw) : x(tx) , y(ty) , z(tz) , w(tw) {}
+	Vector<4,T>(const Vector<4,T>& other) : x(other.x) , y(other.y) , z(other.z) , w(other.z) {}
+	Vector<4,T>(const Vector<3,T>& other,float tw) : x(other.x) , y(other.y) , z(other.z) , w(tw) {}
+	Vector<4,T>(const T* data) {
+		x = *data;
+		++data;
+		y = *data;
+		++data;
+		z = *data;
+		++data;
+		w = *data;
+	}
+	const T* operator() () const {
+		return &data[0];
+	}
+};
+
+//! The == operator
+/*! The compound == operator will return true if both vectors are equals
+	\param u first vector
+	\param v second vector
+	\return true if equals
+*/
+template<int Size,class T>
+bool operator == (const Vector<Size,T>& u,const Vector<Size,T>& v) {
+	for ( int i = 0; i < Size; ++i ) {
+		if ( u.data[i] != v.data[i] ) {
+			return false;
+		}
+	}
+	return true;
+}
+
+//! The != operator
+/*! The compound != operator will return true if both vectors are not equals
+	\param u first vector
+	\param v second vector
+	\return true if not equals
+*/
+template<int Size,class T>
+bool operator != (const Vector<Size,T>& u,const Vector<Size,T>& v) {
+	for ( int i = 0; i < Size; ++i ) {
+		if ( u.data[i] != v.data[i] ) {
+			return true;
+		}
+	}
+	return false;
+}
 // -------------------------------------------------------
 // operator +=
 // -------------------------------------------------------
@@ -175,21 +249,39 @@ T length(const Vector<Size,T>& v) {
 	return static_cast<T>(tmp);
 }
 
-// -------------------------------------------------------
-// sqr_length
-// -------------------------------------------------------
+/*! Calculates the squared length of a vector. Sometimes
+	it can be handy to avoid the sqrt of the regular length
+	method and the sqr_length will also work.
+    \param v The vector 
+    \return the square length
+*/ 
 template<int Size,class T>
 T sqr_length(const Vector<Size,T>& v) {
 	return dot(v,v);	
 }
 
-// -------------------------------------------------------
-// Normalize
-// -------------------------------------------------------
+/*! Calculates a normalized vector .
+    \param u The vector that will be normalized 
+    \return A normalized vector
+*/ 
 template<int Size,class T>
 Vector<Size,T> normalize(const Vector<Size,T>& u) {
 	T len = length(u);
 	return u / len;	
+}
+
+/*! Calculates a normalized vector .
+    \param u The vector that will be normalized 
+	\param ret a pointer to a Vector that will contain the normalized values
+    \return A pointer to a normalized vector
+*/ 
+template<int Size,class T>
+Vector<Size,T>* normalize(const Vector<Size,T>& u,Vector<Size,T>* ret) {
+	T len = length(u);
+	for ( int i = 0; i < Size; ++i ) {
+		ret->data[i] /= len;
+	}
+	return ret;	
 }
 
 // -------------------------------------------------------
@@ -212,154 +304,89 @@ Vector<3,T> cross(const Vector<3,T>& v1,const Vector<3,T>& v2) {
 	return Vector<3,T>(x,y,z);
 }
 
-template <int Size,class T> 
-struct Point { 
-
-	T data[Size];
-	
-};
-
+// -------------------------------------------------------
+// Cross
+// -------------------------------------------------------
 template<class T>
-struct Point<2,T> {
-	union { 
-		T data[2]; 
-		struct { 
-			T x, y; 
-		};       
-	}; 	
-	Point<2,T>() : x(0) , y(0) {}
-	explicit Point<2,T>(T t) : x(t) , y(t) {}
-	Point<2,T>(T xv,T yv) : x(xv) , y(yv) {}
-	Point<2,T>(const Point<2,int>& other) : x(other.x) , y(other.y) {}
-	Point<2,T>(const T* value) {
-		x = *value;
-		++value;
-		y = *value;
-	}
-	const T& operator[] (int idx) const { return data[idx];}
-	T* operator() () {
-		return &data[0];
-	}
-};
-
-// -------------------------------------------------------
-// operator +=
-// -------------------------------------------------------
-template<int Size,class T>
-Point<Size,T> operator += (Point<Size,T>& u,const Point<Size,T>& v) {
-	for ( int i = 0; i < Size; ++i ) {
-		u.data[i] += v.data[i];
-	}
-	return u;
-}
-
-// -------------------------------------------------------
-// operator *=
-// -------------------------------------------------------
-template<int Size,class T>
-Point<Size,T> operator *= (Point<Size,T>& u,T other) {
-	for ( int i = 0; i < Size; ++i ) {
-		u.data[i] *= other;
-	}
-	return u;
-}
-
-// -------------------------------------------------------
-// operator *=
-// -------------------------------------------------------
-template<int Size,class T>
-Point<Size,T> operator *= (Point<Size,T>& u,const Point<Size,T>& other) {
-	for ( int i = 0; i < Size; ++i ) {
-		u.data[i] *= other.data[i];
-	}
-	return u;
-}
-
-// -------------------------------------------------------
-// operator /=
-// -------------------------------------------------------
-template<int Size,class T>
-Point<Size,T>& operator /= (Point<Size,T>& u,T other) {
-	for ( int i = 0; i < Size; ++i ) {
-		u.data[i] /= other;
-	}
-	return u;
-}
-
-// -------------------------------------------------------
-// operator /=
-// -------------------------------------------------------
-template<int Size,class T>
-Point<Size,T>& operator /= (Point<Size,T>& u,const Point<Size,T>& other) {
-	for ( int i = 0; i < Size; ++i ) {
-		u.data[i] /= other.data[i];
-	}
-	return u;
-}
-
-// -------------------------------------------------------
-// operator -=
-// -------------------------------------------------------
-template<int Size,class T>
-Point<Size,T>& operator -= (Point<Size,T>& u,const Point<Size,T>& v) {
-	for ( int i = 0; i < Size; ++i ) {
-		u.data[i] -= v.data[i];
-	}
-	return u;
-}
-
-// -------------------------------------------------------
-// operator +
-// -------------------------------------------------------
-template<int Size,class T>
-Point<Size,T> operator + (const Point<Size,T>& u,const Point<Size,T>& v) {
-	Point<Size,T> ret = u;
-	return ret += v;
-}
-
-// -------------------------------------------------------
-// operator -
-// -------------------------------------------------------
-template<int Size,class T>
-Point<Size,T> operator - (const Point<Size,T>& u,const Point<Size,T>& v) {
-	Point<Size,T> ret = u;
-	return ret -= v;
-}
-
-// -------------------------------------------------------
-// operator *
-// -------------------------------------------------------
-template<int Size,class T>
-Point<Size,T> operator * (const Point<Size,T>& u,const T& v) {
-	Point<Size,T> ret = u;
-	return ret *= v;
-}
-
-// -------------------------------------------------------
-// operator *
-// -------------------------------------------------------
-template<int Size,class T>
-Point<Size,T> operator * (const Point<Size,T>& u,const Point<Size,T>& v) {
-	Point<Size,T> ret = u;
-	for ( int i = 0; i < size; ++i ) {
-		ret.data[i] *= v.data[i];
-	}
+Vector<3,T>* cross(const Vector<3,T>& u,const Vector<3,T>& v,Vector<3,T>* ret) {
+	ret->x = u.y * v.z - u.z * v.y;
+	ret->y = u.z * v.x - u.x * v.z; 
+	ret->z = u.x * v.y - u.y * v.x;
 	return ret;
 }
 
 // -------------------------------------------------------
-// operator /
+// lerp for type float
 // -------------------------------------------------------
+template<int Size>
+Vector<Size,float> lerp(const Vector<Size,float>& u,const Vector<Size,float>& v,float time) {
+	float norm = time;
+	if ( norm < 0.0f ) {
+		norm = 0.0f;
+	}
+	if ( norm > 1.0f ) {
+		norm = 1.0f;
+	}
+	Vector<Size,float> ret;
+	for ( int i = 0; i < Size; ++i ) {
+		ret.data[i] = u.data[i] * (1.0f - norm) + v.data[i] * norm;
+	}
+	return ret;
+}
+
 template<int Size,class T>
-Point<Size,T> operator / (const Point<Size,T>& u,const T& v) {
-	Point<Size,T> ret = u;
-	return ret /= v;
+Vector<Size,T> v_min(const Vector<Size,T>& u,const Vector<Size,T>& v) {
+	Vector<Size,T> ret;
+	for ( int i = 0; i < Size; ++i ) {
+		if ( u.data[i] <= v.data[i] ) {
+			ret.data[i] = u.data[i];
+		}
+		else {
+			ret.data[i] = v.data[i];
+		}
+	}
+	return ret;
+}
+
+template<int Size,class T>
+Vector<Size,T> v_max(const Vector<Size,T>& u,const Vector<Size,T>& v) {
+	Vector<Size,T> ret;
+	for ( int i = 0; i < Size; ++i ) {
+		if ( u.data[i] >= v.data[i] ) {
+			ret.data[i] = u.data[i];
+		}
+		else {
+			ret.data[i] = v.data[i];
+		}
+	}
+	return ret;
+}
+
+template<int Size,class T>
+Vector<Size,T> clamp(const Vector<Size,T>& u,const Vector<Size,T>& min,const Vector<Size,T>& max) {
+    Vector<Size,T> ret;
+    for ( int i = 0; i < Size; ++i ) {
+        ret.data[i] = u.data[i];
+        if ( u.data[i] > max.data[i] ) {
+            ret.data[i] = max.data[i];
+        }
+        else if ( u.data[i] < min.data[i] ){
+            ret.data[i] = min.data[i];
+        }
+    }
+    return ret;
+}
+
+template<int Size>
+Vector<Size,float> saturate(const Vector<Size,float>& u) {
+	return clamp(u,Vector<Size,float>(0.0f),Vector<Size,float>(1.0f));    
+}
+
+template<int Size>
+Vector<Size,int> saturate(const Vector<Size,int>& u) {
+	return clamp(u,Vector<Size,int>(0),Vector<Size,int>(1));    
 }
 
 typedef Vector<2,int> Vector2i;
 typedef Vector<2,float> Vector2f;
 typedef Vector<3,float> Vector3f;
-typedef Point<2,int> Point2i;
-typedef Point<2,float> Point2f;
-//typedef Point<3,int> Point3i;
-//typedef Point<3,float> Pointfi;

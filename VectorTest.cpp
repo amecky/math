@@ -1,4 +1,3 @@
-#define CATCH_CONFIG_MAIN
 #include "catch.hpp"
 #include "Vector.h"
 
@@ -33,10 +32,5 @@ TEST_CASE("Constructor-V2","[Vector]") {
 	REQUIRE( *v == 5 );
 }
 
-TEST_CASE("Add","[point]") {
-	Point2f p(1.0f,2.0f);
-	Point2f c = p + Point2f(3.0f,3.0f);
-	REQUIRE( c.x == 4.0f) ;
-	REQUIRE( c.y == 5.0f) ;
-}
+
 
