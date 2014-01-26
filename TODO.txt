@@ -1,5 +1,0 @@
-- min, max, lerp, saturate, clamp
-- vector<4,T>
-- v3 -> swizzles yx yz zy
-- operators == and != 
-- Point
