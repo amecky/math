@@ -147,9 +147,12 @@ bool operator != (const Vector<Size,T>& u,const Vector<Size,T>& v) {
 	}
 	return false;
 }
-// -------------------------------------------------------
-// operator +=
-// -------------------------------------------------------
+
+/*! Compound operator += which will add the second to the first vector
+	\param u the first vector
+	\param v the vector that will be added to the first one
+	\return a vector with the result
+*/
 template<int Size,class T>
 Vector<Size,T> operator += (Vector<Size,T>& u,const Vector<Size,T>& v) {
 	for ( int i = 0; i < Size; ++i ) {
@@ -180,9 +183,11 @@ Vector<Size,T>& operator /= (Vector<Size,T>& u,T other) {
 	return u;
 }
 
-// -------------------------------------------------------
-// operator -=
-// -------------------------------------------------------
+/*! Compound operator -= which will subtract the second to the first vector
+	\param u the first vector
+	\param v the vector that will be subtracted to the first one
+	\return a vector with the result
+*/
 template<int Size,class T>
 Vector<Size,T>& operator -= (Vector<Size,T>& u,const Vector<Size,T>& v) {
 	for ( int i = 0; i < Size; ++i ) {
@@ -209,27 +214,33 @@ Vector<Size,T> operator - (const Vector<Size,T>& u,const Vector<Size,T>& v) {
 	return ret -= v;
 }
 
-// -------------------------------------------------------
-// operator *
-// -------------------------------------------------------
+/*! Multiplies a vector by a scalar
+	\param u the vector
+	\param v the scalar
+	\return a vector with the result
+*/
 template<int Size,class T>
 Vector<Size,T> operator * (const Vector<Size,T>& u,const T& v) {
 	Vector<Size,T> ret = u;
 	return ret *= v;
 }
 
-// -------------------------------------------------------
-// operator /
-// -------------------------------------------------------
+/*! Divides a vector by a scalar
+	\param u the vector
+	\param v the scalar
+	\return a vector with the result
+*/
 template<int Size,class T>
 Vector<Size,T> operator / (const Vector<Size,T>& u,const T& v) {
 	Vector<Size,T> ret = u;
 	return ret /= v;
 }
 
-// -------------------------------------------------------
-// Dot
-// -------------------------------------------------------
+/*! Dot product of two vectors
+	\param u first vector
+	\param v second vector
+	\return the dot product as scalar
+*/
 template<int Size,class T>
 T dot(const Vector<Size,T>& v,const Vector<Size,T>& u) {
 	T t(0);
@@ -239,9 +250,10 @@ T dot(const Vector<Size,T>& v,const Vector<Size,T>& u) {
 	return t;
 }
 
-// -------------------------------------------------------
-// Length
-// -------------------------------------------------------
+/*! Calculates the length of a vector
+	\param v the vector
+	\return the length of a vector as scalar
+*/
 template<int Size,class T>
 T length(const Vector<Size,T>& v) {
 	T t = dot(v,v);	
@@ -284,29 +296,36 @@ Vector<Size,T>* normalize(const Vector<Size,T>& u,Vector<Size,T>* ret) {
 	return ret;	
 }
 
-// -------------------------------------------------------
-// Distance
-// -------------------------------------------------------
+/*! Calculates the distance between to vectors
+	\param u first vector
+	\param v second vector
+	\return the distance
+*/
 template<int Size,class T>
 T distance(const Vector<Size,T>& u,const Vector<Size,T>& v) {
 	Vector<Size,T> sub = u - v;
 	return length(sub);
 }
 
-// -------------------------------------------------------
-// Cross
-// -------------------------------------------------------
+/*! Cross product of two vectors
+	\param u first vector
+	\param v second vector
+	\return a vector containing the cross product
+*/
 template<class T>
-Vector<3,T> cross(const Vector<3,T>& v1,const Vector<3,T>& v2) {
-	T x = v1.y * v2.z - v1.z * v2.y;
-	T y = v1.z * v2.x - v1.x * v2.z; 
-	T z = v1.x * v2.y - v1.y * v2.x;
+Vector<3,T> cross(const Vector<3,T>& u,const Vector<3,T>& v) {
+	T x = u.y * v.z - u.z * v.y;
+	T y = u.z * v.x - u.x * v.z; 
+	T z = u.x * v.y - u.y * v.x;
 	return Vector<3,T>(x,y,z);
 }
 
-// -------------------------------------------------------
-// Cross
-// -------------------------------------------------------
+/*! Cross product of two vectors
+	\param u first vector
+	\param v second vector
+	\param ret a pointer to a vector which will contain the cross product
+	\return a pointer to a vector
+*/
 template<class T>
 Vector<3,T>* cross(const Vector<3,T>& u,const Vector<3,T>& v,Vector<3,T>* ret) {
 	ret->x = u.y * v.z - u.z * v.y;
@@ -315,11 +334,15 @@ Vector<3,T>* cross(const Vector<3,T>& u,const Vector<3,T>& v,Vector<3,T>* ret) {
 	return ret;
 }
 
-// -------------------------------------------------------
-// lerp for type float
-// -------------------------------------------------------
+/*! Linear interpolation of two vectors of the type float.
+	\param u first vector
+	\param v second vector
+	\param t the normalized time. It will be clamped to 0 to 1.
+	\param ret a pointer to a vector that will be updated
+	\return a pointer to vector containing the interpolation
+*/
 template<int Size>
-Vector<Size,float> lerp(const Vector<Size,float>& u,const Vector<Size,float>& v,float time) {
+Vector<Size,float>* lerp(const Vector<Size,float>& u,const Vector<Size,float>& v,float time,Vector<Size,float>* ret) {
 	float norm = time;
 	if ( norm < 0.0f ) {
 		norm = 0.0f;
@@ -327,10 +350,22 @@ Vector<Size,float> lerp(const Vector<Size,float>& u,const Vector<Size,float>& v,
 	if ( norm > 1.0f ) {
 		norm = 1.0f;
 	}
-	Vector<Size,float> ret;
 	for ( int i = 0; i < Size; ++i ) {
-		ret.data[i] = u.data[i] * (1.0f - norm) + v.data[i] * norm;
+		ret->data[i] = u.data[i] * (1.0f - norm) + v.data[i] * norm;
 	}
+	return ret;
+}
+
+/*! Linear interpolation of two vectors of the type float.
+	\param u first vector
+	\param v second vector
+	\param t the normalized time. It will be clamped to 0 to 1.
+	\return a vector containing the interpolation
+*/
+template<int Size>
+Vector<Size,float> lerp(const Vector<Size,float>& u,const Vector<Size,float>& v,float time) {	
+	Vector<Size,float> ret;
+	lerp(u,v,time,&ret);
 	return ret;
 }
 
