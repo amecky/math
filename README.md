@@ -23,6 +23,15 @@ The following list contains all operators that are currently implemented:
 - *
 - /
 
+Note that the * and / operators are special versions and they cannot accept
+a second vector as argument. Same applies of course for the matching compound
+operators.
+
+<pre>
+Vector3f a(2.0f);
+Vector3f b = a * 2.0f;
+</pre>
+
 # Functions
 
 The Vector header files also contains all necessary functions on vectors. They
@@ -30,6 +39,7 @@ are not part of the vector struct itself.
 
 The following functions mainly work on all sizes. Only the cross function is limited
 to Vectors of size 3. Also the lerp function is limited to the type float. 
+
 | Name       | Description                                     |
 | ---------- | ----------------------------------------------- |
 | vec_min    | min of two vectors                              |
