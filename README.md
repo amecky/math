@@ -12,6 +12,7 @@ inspired to write my own math library trying to follow any idea found in the art
 
 The following list contains all operators that are currently implemented:
 
+- =
 - +=
 - -=
 - *=
@@ -40,19 +41,20 @@ are not part of the vector struct itself.
 The following functions mainly work on all sizes. Only the cross function is limited
 to Vectors of size 3. Also the lerp function is limited to the type float. 
 
-| Name       | Description                                     |
-| ---------- | ----------------------------------------------- |
-| vec_min    | min of two vectors                              |
-| vec_max    | max of two vectors                              |
-| lerp       | linear interpolation between to vectors         |
-| clamp      | Clamps a given vector in the range of two other |
-| saturate   | Clamps a given vector in the range of 0 to 1    |
-| dot        | dot product of two vectors                      |
-| cross      | cross product of two vectors                    |
-| length     | length of a vector                              |
-| sqr_length | the square length of a vector                   |
-| distance   | the distance from one vector to another         |
-| normalize  | normalized vector                               |
+| Name        | Description                                     |
+| ----------- | ----------------------------------------------- |
+| vec_min     | min of two vectors                              |
+| vec_max     | max of two vectors                              |
+| lerp        | linear interpolation between to vectors         |
+| clamp       | Clamps a given vector in the range of two other |
+| saturate    | Clamps a given vector in the range of 0 to 1    |
+| dot         | dot product of two vectors                      |
+| cross       | cross product of two vectors                    |
+| length      | length of a vector                              |
+| sqr_length  | the square length of a vector                   |
+| distance    | the distance from one vector to another         |
+| normalize   | normalized vector                               |
+| catmullRom  | cubic interpolation                             |
 
 # How to use it
 
@@ -72,6 +74,26 @@ In case you need something else you can of course define your own like
 <pre>
 typedef Vector<4,float> Vector4f
 </pre>
+
+# IPath
+
+This is a template class to support a path. It requires that you define
+the actual number of elments and the type.
+
+Here is a short example using a Vector2f:
+
+<pre>
+IPath<3,Vector2f> p;
+p.add(0.0f,Vector2f(1.0f,1.0f));
+p.add(0.5f,Vector2f(2.0f,2.0f));
+p.add(1.0f,Vector2f(3.0f,3.0f));	
+
+Vector2f f;
+bool ret = p.get(0.25f,&f);
+</pre>
+
+Since Path is a reserved class name it is called IPath. But it is not an interface.
+The actual name InterpolationPath was just too long.
 
 # Versions
 

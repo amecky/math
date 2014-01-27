@@ -52,6 +52,12 @@ struct Vector<2,T> {
 	T* operator() () {
 		return &data[0];
 	}
+	//! assignment operator
+	Vector<2,T>& operator = (const Vector<2,T>& other) {
+		x = other.x;
+		y = other.y;
+		return *this;
+	}
 };
 
 //! Specialized template for size 3
@@ -80,10 +86,16 @@ struct Vector<3,T> {
 	T* operator() () {
 		return &data[0];
 	}
+	//! assignment operator
+	Vector<3,T>& operator = (const Vector<3,T>& other) {
+		x = other.x;
+		y = other.y;
+		z = other.z;
+		return *this;
+	}
 	Vector<2,T> xy() {
 		return Vector<2,T>(x,y);
-	}
-	
+	}	
 };
 
 //! Specialized Vector with size 4
@@ -113,6 +125,14 @@ template <class T> struct Vector<4,T> {
 	}
 	const T* operator() () const {
 		return &data[0];
+	}
+	//! assignment operator
+	Vector<4,T>& operator = (const Vector<4,T>& other) {
+		x = other.x;
+		y = other.y;
+		z = other.z;
+		w = other.w;
+		return *this;
 	}
 };
 
@@ -420,6 +440,16 @@ Vector<Size,float> saturate(const Vector<Size,float>& u) {
 template<int Size>
 Vector<Size,int> saturate(const Vector<Size,int>& u) {
 	return clamp(u,Vector<Size,int>(0),Vector<Size,int>(1));    
+}
+
+template<int Size>
+Vector<Size,float> catmullRom(float t,const Vector<Size,float>& v0,const Vector<Size,float>& v1,const Vector<Size,float>& v2,const Vector<Size,float>& v3) {
+	float tt = t*t;
+	Vector<Size,float> ret(0.0f);
+	for ( int i = 0; i < Size; ++i ) {
+		ret.data[i] = 0.5f*((2.0f*v1.data[i])+(-v0.data[i]+v2.data[i])*t+(2.0f*v0.data[i]-5.0f*v1.data[i]+4.0f*v2.data[i]-v3.data[i])*tt+(-v0.data[i]+3.0f*(v1.data[i]-v2.data[i])+v3.data[i])*tt*t);
+	}
+	return ret;
 }
 
 typedef Vector<2,int> Vector2i;
