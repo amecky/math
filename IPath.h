@@ -1,6 +1,6 @@
 #pragma once
 
-float catmullRom(float t, float v0, float v1, float v2, float v3) {
+inline float catmullRom(float t, float v0, float v1, float v2, float v3) {
 	const float tt = t*t;
 	return 0.5f*((2.0f*v1)+(-v0+v2)*t+(2.0f*v0-5.0f*v1+4.0f*v2-v3)*tt+(-v0+3.0f*(v1-v2)+v3)*tt*t);
 }

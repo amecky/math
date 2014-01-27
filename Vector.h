@@ -8,7 +8,7 @@
 //-------------------------------------------------------------------------
 #pragma once
 #include <cmath>
-
+#include <iostream>
 //! Basic Vector template
 /*! This is the basic template defining only the array of data.
 	The size and the class needs to be defined.
@@ -167,6 +167,20 @@ bool operator != (const Vector<Size,T>& u,const Vector<Size,T>& v) {
 	}
 	return false;
 }
+
+/*! Unary operator - which will change the sign on every member
+	\param u the first vector
+	\return a vector with the result
+*/
+template<int Size,class T>
+Vector<Size,T> operator - (const Vector<Size,T>& v) {
+	Vector<Size,T> ret;
+	for ( int i = 0; i < Size; ++i ) {
+		ret.data[i] = -v.data[i];
+	}
+	return ret;
+}
+
 
 /*! Compound operator += which will add the second to the first vector
 	\param u the first vector
@@ -465,3 +479,29 @@ typedef Vector<2,float> Vector2f;
 typedef Vector<3,int> Vector3i;
 typedef Vector<3,float> Vector3f;
 typedef Vector<4,float> Vector4f;
+
+inline std::ostream& operator << (std::ostream& os, const Vector2f& v) {
+	os << v.x;
+	os << v.y;
+	return os;
+}
+
+inline std::istream& operator >> (std::istream& input, Vector2f& v) {
+	input >> v.x;
+	input >> v.y;	
+	return input;
+}
+
+inline std::ostream& operator << (std::ostream& os, const Vector3f& v) {
+	os << v.x;
+	os << v.y;
+	os << v.z;
+	return os;
+}
+
+inline std::istream& operator >> (std::istream& input, Vector3f& v) {
+	input >> v.x;
+	input >> v.y;	
+	input >> v.z;	
+	return input;
+}
