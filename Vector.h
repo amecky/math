@@ -442,6 +442,14 @@ Vector<Size,int> saturate(const Vector<Size,int>& u) {
 	return clamp(u,Vector<Size,int>(0),Vector<Size,int>(1));    
 }
 
+/*! Cubic interpolation of four vectors of the type float.
+	\param v0 first vector
+	\param v1 second vector
+	\param v2 third vector
+	\param v3 fourth vector
+	\param t the normalized time
+	\return a vector containing the cubic interpolation
+*/
 template<int Size>
 Vector<Size,float> catmullRom(float t,const Vector<Size,float>& v0,const Vector<Size,float>& v1,const Vector<Size,float>& v2,const Vector<Size,float>& v3) {
 	float tt = t*t;
