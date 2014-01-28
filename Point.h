@@ -205,6 +205,37 @@ Point<Size,T> operator / (const Point<Size,T>& u,const T& v) {
 	return ret /= v;
 }
 
+template<int Size>
+Point<Size,float>* lerp(const Point<Size,float>& u,const Point<Size,float>& v,float time,Point<Size,float>* ret) {
+	float norm = time;
+	if ( norm < 0.0f ) {
+		norm = 0.0f;
+	}
+	if ( norm > 1.0f ) {
+		norm = 1.0f;
+	}
+	for ( int i = 0; i < Size; ++i ) {
+		ret->data[i] = u.data[i] * (1.0f - norm) + v.data[i] * norm;
+	}
+	return ret;
+}
+
+template<int Size>
+Point<Size,float> lerp(const Point<Size,float>& u,const Point<Size,float>& v,float time) {    
+	Point<Size,float> ret;
+	lerp(u,v,time,&ret);
+	return ret;
+}
+
+template<int Size>
+float distance(const Point<Size,float>& u,const Point<Size,float>& v) {
+	Point<Size,float> sub = u - v;
+	float t = 0.0f;
+	for ( int i = 0; i < Size; ++i ) {
+		t += sub.data[i] * sub.data[i];
+	}
+	return std::sqrt(t);
+}
 
 typedef Point<2,int> Point2i;
 typedef Point<2,float> Point2f;
