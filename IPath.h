@@ -61,7 +61,7 @@ public:
 	/*
 	 * \return value at index
 	*/
-	const float value(int index) const {
+	const T& value(int index) const {
 		return m_Array[index].value;
 	}
 	//! Sets interpolation mode

@@ -284,6 +284,7 @@ T dot(const Vector<Size,T>& v,const Vector<Size,T>& u) {
 	return t;
 }
 
+
 /*! Calculates the length of a vector
 	\param v the vector
 	\return the length of a vector as scalar
@@ -366,6 +367,11 @@ Vector<3,T>* cross(const Vector<3,T>& u,const Vector<3,T>& v,Vector<3,T>* ret) {
 	ret->y = u.z * v.x - u.x * v.z; 
 	ret->z = u.x * v.y - u.y * v.x;
 	return ret;
+}
+
+template<class T>
+T cross(const Vector<2,T>& v1,const Vector<2,T>& v2) {
+	return v1.x * v2.y - v2.x * v1.y;		
 }
 
 /*! Linear interpolation of two vectors of the type float.
@@ -505,3 +511,4 @@ inline std::istream& operator >> (std::istream& input, Vector3f& v) {
 	input >> v.z;	
 	return input;
 }
+
