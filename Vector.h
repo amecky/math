@@ -48,6 +48,7 @@ struct Vector<2,T> {
 		y = *value;
 	}	
 	const T& operator[] (int idx) const { return data[idx];}
+	T& operator[] (int idx) { return data[idx]; }
 	//! Conversion operator returning a pointer to internal data
 	T* operator() () {
 		return &data[0];
@@ -82,7 +83,9 @@ struct Vector<3,T> {
 		++value;
 		z = *value;
 	}
-	const T operator[] (int idx) const { return data[idx];}
+	Vector<3, T>(const Vector<2, T>& v) { x = v.x; y = v.y; z = 0.0f; }	
+	const T& operator[] (int idx) const { return data[idx];}
+	T& operator[] (int idx) { return data[idx]; }
 	T* operator() () {
 		return &data[0];
 	}
@@ -112,7 +115,7 @@ template <class T> struct Vector<4,T> {
 	Vector<4,T>() : x(0) , y(0) , z(0) , w(0) {}
 	explicit Vector<4,T>(T t) : x(t) , y(t) , z(t) , w(t) {}
 	Vector<4,T>(T tx,T ty,T tz,T tw) : x(tx) , y(ty) , z(tz) , w(tw) {}
-	Vector<4,T>(const Vector<4,T>& other) : x(other.x) , y(other.y) , z(other.z) , w(other.z) {}
+	Vector<4,T>(const Vector<4,T>& other) : x(other.x) , y(other.y) , z(other.z) , w(other.w) {}
 	Vector<4,T>(const Vector<3,T>& other,float tw) : x(other.x) , y(other.y) , z(other.z) , w(tw) {}
 	Vector<4,T>(const T* data) {
 		x = *data;
@@ -133,6 +136,9 @@ template <class T> struct Vector<4,T> {
 		z = other.z;
 		w = other.w;
 		return *this;
+	}
+	Vector<3, T> xyz() {
+		return Vector<3, T>(x, y, z);
 	}
 };
 
@@ -195,6 +201,20 @@ Vector<Size,T> operator += (Vector<Size,T>& u,const Vector<Size,T>& v) {
 	return u;
 }
 
+/*! Compound operator += which will add the second to the first vector
+	\param u the first vector
+	\param v the vector that will be added to the first one
+	\return a vector with the result
+*/
+template<int Size,class T>
+Vector<Size,T> operator += (const Vector<Size,T>& u,const Vector<Size,T>& v) {
+	Vector<Size,T> r;
+	for ( int i = 0; i < Size; ++i ) {
+		r.data[i] = u.data[i] + v.data[i];
+	}
+	return r;
+}
+
 // -------------------------------------------------------
 // operator *=
 // -------------------------------------------------------
@@ -230,6 +250,14 @@ Vector<Size,T>& operator -= (Vector<Size,T>& u,const Vector<Size,T>& v) {
 	return u;
 }
 
+template<int Size, class T>
+Vector<Size, T>& operator -= (const Vector<Size, T>& u, const Vector<Size, T>& v) {
+	Vector<Size, T> r;
+	for (int i = 0; i < Size; ++i) {
+		r.data[i] = u.data[i] - v.data[i];
+	}
+	return r;
+}
 // -------------------------------------------------------
 // operator +
 // -------------------------------------------------------
@@ -255,6 +283,17 @@ Vector<Size,T> operator - (const Vector<Size,T>& u,const Vector<Size,T>& v) {
 */
 template<int Size,class T>
 Vector<Size,T> operator * (const Vector<Size,T>& u,const T& v) {
+	Vector<Size,T> ret = u;
+	return ret *= v;
+}
+
+/*! Multiplies a vector by a scalar
+	\param u the vector
+	\param v the scalar
+	\return a vector with the result
+*/
+template<int Size,class T>
+Vector<Size,T> operator * (const T& v,const Vector<Size,T>& u) {
 	Vector<Size,T> ret = u;
 	return ret *= v;
 }
@@ -314,6 +353,9 @@ T sqr_length(const Vector<Size,T>& v) {
 template<int Size,class T>
 Vector<Size,T> normalize(const Vector<Size,T>& u) {
 	T len = length(u);
+	if ( len == 0.0f ) {
+		return Vector<Size,T>();
+	}
 	return u / len;	
 }
 
@@ -452,6 +494,18 @@ Vector<Size,T> clamp(const Vector<Size,T>& u,const Vector<Size,T>& min,const Vec
     return ret;
 }
 
+template<int Size, class T>
+void clamp(Vector<Size, T>* u, const Vector<Size, T>& min, const Vector<Size, T>& max) {
+	for (int i = 0; i < Size; ++i) {		
+		if (u->data[i] > max.data[i]) {
+			u->data[i] = max.data[i];
+		}
+		else if (u->data[i] < min.data[i]){
+			u->data[i] = min.data[i];
+		}
+	}
+}
+
 template<int Size>
 Vector<Size,float> saturate(const Vector<Size,float>& u) {
 	return clamp(u,Vector<Size,float>(0.0f),Vector<Size,float>(1.0f));    
@@ -485,6 +539,22 @@ typedef Vector<2,float> Vector2f;
 typedef Vector<3,int> Vector3i;
 typedef Vector<3,float> Vector3f;
 typedef Vector<4,float> Vector4f;
+
+const Vector2f V2_RIGHT = Vector2f(1,0);
+const Vector2f V2_LEFT = Vector2f(-1,0);
+const Vector2f V2_UP   = Vector2f(0,1);
+const Vector2f V2_DOWN = Vector2f(0,-1);
+const Vector2f V2_ZERO = Vector2f(0, 0);
+const Vector2f V2_ONE = Vector2f(1,1);
+
+const Vector3f V3_RIGHT = Vector3f(1, 0, 0);
+const Vector3f V3_LEFT  = Vector3f(-1, 0, 0);
+const Vector3f V3_UP    = Vector3f(0, 1 , 0);
+const Vector3f V3_DOWN  = Vector3f(0, -1, 0);
+const Vector3f V3_FORWARD  = Vector3f(0, 0, -1);
+const Vector3f V3_BACKWARD = Vector3f(0, 0, 1);
+const Vector3f V3_ZERO  = Vector3f(0, 0, 0);
+const Vector3f V3_ONE   = Vector3f(1, 1, 1);
 
 inline std::ostream& operator << (std::ostream& os, const Vector2f& v) {
 	os << v.x;
