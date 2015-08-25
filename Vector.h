@@ -540,6 +540,11 @@ typedef Vector<3,int> Vector3i;
 typedef Vector<3,float> Vector3f;
 typedef Vector<4,float> Vector4f;
 
+
+typedef Vector<2, float> v2;
+typedef Vector<3, float> v3;
+typedef Vector<4, float> v4;
+
 const Vector2f V2_RIGHT = Vector2f(1,0);
 const Vector2f V2_LEFT = Vector2f(-1,0);
 const Vector2f V2_UP   = Vector2f(0,1);
