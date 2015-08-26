@@ -44,7 +44,7 @@ struct Matrix<3,3,T> {
 };
 
 template<class T>
-struct Matrix<4,4,T> {
+struct Matrix<4, 4, T> {
 	union {
 		T data[4][4];
 		struct {
@@ -54,12 +54,12 @@ struct Matrix<4,4,T> {
 			float m41, m42, m43, m44;
 		};
 	};
-	Matrix<4,4,T>() : m11(0) , m12(0), m13(0) , m14(0) , m21(0) , m22(0) , m23(0) , m24(0) , m31(0) , m32(0) , m33(0) , m34(0) , m41(0) , m42(0), m43(0) , m44(0) {}
-	Matrix<4,4,T>(T v11,T v12,T v13,T v14,T v21,T v22,T v23,T v24,T v31,T v32,T v33,T v34,T v41,T v42,T v43, T v44) 
-		: m11(v11) , m12(v12) , m13(v13) , m14(v14) , m21(v21) , m22(v22) , m23(v23) , m24(v24) , m31(v31) , m32(v32) , m33(v33) , m34(v34) , m41(v41) , m42(v42) , m43(v43) , m44(v44) {}
+	Matrix<4, 4, T>() : m11(0), m12(0), m13(0), m14(0) , m21(0), m22(0), m23(0), m24(0), m31(0), m32(0), m33(0) , m34(0) , m41(0) , m42(0) , m43(0) , m44(0) {}
+	Matrix<4, 4, T>(T v11, T v12, T v13, T v14, T v21, T v22, T v23, T v24, T v31, T v32, T v33, T v34,T v41, T v42, T v43, T v44)
+		: m11(v11), m12(v12), m13(v13), m14(v14), m21(v21), m22(v22), m23(v23), m24(v24), m31(v31), m32(v32), m33(v33) , m34(v34) , m41(v41) , m42(v42) , m43(v43) , m44(v44) {}
 
-	operator T *() const { 
-		return (T*) &m11; 
+	operator T *() const {
+		return (T*)&m11;
 	}
 };
 
@@ -106,17 +106,6 @@ Matrix<3,3,T> operator * (const Matrix<3,3,T>& m1,const Matrix<3,3,T>& m2) {
 }
 
 template<class T>
-Matrix<4,4,T> rotationZ(float angle) {
-	Matrix<4,4,T> sm (
-			cos(angle),-sin(angle), 0.0f, 0.0f,
-			sin(angle), cos(angle), 0.0f, 0.0f,
-			      0.0f,       0.0f, 1.0f, 0.0f,
-			      0.0f,       0.0f, 0.0f, 1.0f
-		);	
-	return sm;
-}
-
-template<class T>
 Vector<3,T> operator * (const Matrix<3,3,T>& m,const Vector<3,T>& v) {
 	Vector<3,T> tmp;
 	tmp.x = m.m11 * v.x + m.m12 * v.y + m.m13 * v.z;
@@ -126,9 +115,9 @@ Vector<3,T> operator * (const Matrix<3,3,T>& m,const Vector<3,T>& v) {
 }
 
 template<class T>
-Vector<3,T> operator * (const Matrix<4,4,T>& m,const Vector<3,T>& v) {
-	Vector<4,T> u(v,1);
-	Vector<4,T> tmp;
+Vector<3, T> operator * (const Matrix<4, 4, T>& m, const Vector<3, T>& v) {
+	Vector<4, T> tmp;
+	Vector<4, T> u(v,1);
 	tmp.x = m.m11 * u.x + m.m12 * u.y + m.m13 * u.z + m.m14 * u.w;
 	tmp.y = m.m21 * u.x + m.m22 * u.y + m.m23 * u.z + m.m24 * u.w;
 	tmp.z = m.m31 * u.x + m.m32 * u.y + m.m33 * u.z + m.m34 * u.w;
@@ -148,6 +137,17 @@ void identity(Matrix<3,3,T>* ret) {
 			}
 		}
 	}	
+}
+
+template<class T>
+Matrix<4,4,T> rotationZ(T angle) {
+	Matrix<4, 4, T> sm(
+		cos(angle), -sin(angle), 0.0f, 0.0f,
+		sin(angle), cos(angle), 0.0f, 0.0f,
+		0.0f, 0.0f, 1.0f, 0.0f,
+		0.0f, 0.0f, 0.0f, 1.0f
+		);
+	return sm;
 }
 
 typedef Matrix<2,2,float> Mat22f;
