@@ -137,6 +137,9 @@ template <class T> struct Vector<4,T> {
 		w = other.w;
 		return *this;
 	}
+	Vector<2, T> xy() {
+		return Vector<2, T>(x, y);
+	}
 	Vector<3, T> xyz() {
 		return Vector<3, T>(x, y, z);
 	}
