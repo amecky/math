@@ -519,6 +519,17 @@ Vector<Size,int> saturate(const Vector<Size,int>& u) {
 	return clamp(u,Vector<Size,int>(0),Vector<Size,int>(1));    
 }
 
+template<int Size,class T>
+void limit(Vector<Size,T>* v,const Vector<Size,T>& u) {
+	for (int i = 0; i < Size; ++i) {
+		if (v->data[i] > u.data[i]) {
+			v->data[i] = u.data[i];
+		}
+		else if (v->data[i] < -u.data[i]){
+			v->data[i] = -u.data[i];
+		}
+	}
+}
 /*! Cubic interpolation of four vectors of the type float.
 	\param v0 first vector
 	\param v1 second vector
