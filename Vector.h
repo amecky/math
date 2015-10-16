@@ -530,6 +530,17 @@ void limit(Vector<Size,T>* v,const Vector<Size,T>& u) {
 		}
 	}
 }
+
+template<int Size, class T>
+Vector<Size, T> reflect(const Vector<Size, T>& u, const Vector<Size, T>& norm) {
+	Vector<Size, T> ret;
+	float dp = dot(u, norm);
+	for (int i = 0; i < Size; ++i) {
+		ret.data[i] = u.data[i] - 2.0f * dp * norm.data[i];
+	}
+	return ret;
+}
+
 /*! Cubic interpolation of four vectors of the type float.
 	\param v0 first vector
 	\param v1 second vector
