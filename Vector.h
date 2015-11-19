@@ -387,6 +387,12 @@ T distance(const Vector<Size,T>& u,const Vector<Size,T>& v) {
 	return length(sub);
 }
 
+template<int Size, class T>
+T sqr_distance(const Vector<Size, T>& u, const Vector<Size, T>& v) {
+	Vector<Size, T> sub = u - v;
+	return sqr_length(sub);
+}
+
 /*! Cross product of two vectors
 	\param u first vector
 	\param v second vector
