@@ -96,7 +96,7 @@ struct Vector<3,T> {
 		z = other.z;
 		return *this;
 	}
-	Vector<2,T> xy() {
+	Vector<2,T> xy() const {
 		return Vector<2,T>(x,y);
 	}	
 };
@@ -137,10 +137,10 @@ template <class T> struct Vector<4,T> {
 		w = other.w;
 		return *this;
 	}
-	Vector<2, T> xy() {
+	Vector<2, T> xy() const {
 		return Vector<2, T>(x, y);
 	}
-	Vector<3, T> xyz() {
+	Vector<3, T> xyz() const {
 		return Vector<3, T>(x, y, z);
 	}
 };
@@ -421,7 +421,7 @@ Vector<3,T>* cross(const Vector<3,T>& u,const Vector<3,T>& v,Vector<3,T>* ret) {
 }
 
 template<class T>
-T cross(const Vector<2,T>& v1,const Vector<2,T>& v2) {
+T inline cross(const Vector<2,T>& v1,const Vector<2,T>& v2) {
 	return v1.x * v2.y - v2.x * v1.y;		
 }
 
